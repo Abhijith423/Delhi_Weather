@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Delhi Weather</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 flex items-center justify-center h-screen font-sans">
+
+  <div class="bg-white rounded-xl shadow-xl p-6 w-80 text-center">
+    <h2 class="text-2xl font-semibold mb-4 text-blue-700">Delhi Weather</h2>
+    <div id="weatherBox" class="text-gray-700 text-sm">
+      <p>Loading weather data...</p>
+    </div>
+  </div>
+
+  <script>
+    async function fetchWeather() {
+ const url = "https://api.open-meteo.com/v1/forecast?latitude=28.6139&longitude=77.2090&current=temperature_2m,wind_speed_10m,relative_humidity_2m";
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const current = data.current;
+        
+        const html = `
+          <p>📍 City: Delhi </p>
+          <p class="mt-2">🌡️ Temp: <span class="font-semibold">${current.temperature_2m}°C</span></p>
+          <p>💧 Humidity: ${current.relative_humidity_2m}%</p>
+          <p>🌬️ Wind: ${current.wind_speed_10m} m/s</p>
+          <p>📝 Condition: Live data from Open-Meteo</p>
+        `;
+        document.getElementById("weatherBox").innerHTML = html;
+      } catch (error) {
+        document.getElementById("weatherBox").innerHTML = `<p class="text-red-500">⚠️ Error fetching weather data</p>`;
+      }
+    }
+
+    fetchWeather();
+  </script>
+
+</body>
+</html>
